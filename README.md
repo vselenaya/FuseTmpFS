@@ -280,7 +280,6 @@ cat: file: Отказано в доступе
 vselenaya@computer:~/hw_fuse/tmpfs/mnt$ echo "123" > file
 ```
 
-8. Фай
 9. Дадим все права:
 ```console
 vselenaya@computer:~/hw_fuse/tmpfs/mnt$ chmod +rwx file
