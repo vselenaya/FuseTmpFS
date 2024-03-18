@@ -184,37 +184,37 @@ user_allow_other
 ### Пример использования:
 Для начала создадим в рабочей папке проекта (там, где запускается программка) пустую папку:
 ```console
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs$ mkdir mnt
+vselenaya@computer:~/hw_fuse/tmpfs$ mkdir mnt
 ```
 Далее монтируем в эту папку нашу файловую систему - для этого просто запускаем программу с указанием созданной папки `mnt`. Она в дальнейшем будет вместилищем всей нашей файловой системы, она будет её корнем:
 ```console
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs$ ./tm -d -s -o allow_other mnt
+vselenaya@computer:~/hw_fuse/tmpfs$ ./tm -d -s -o allow_other mnt
 ```
 (ключ `-d` оставляет процесс запущенным в этом окне терминала, поэтому выводится отладочная информация..., ключ `-s` выключает многопоточность (так как в данном проекте многопоточность не учитывалась - нет защиты от гонки потоков - лучше её выключить), `-o allow_other` включает многопользовательский доступ)
 
 Далее можем перейти в каталог `mnt`, с этого момента мы находимся в нашей файловой системе; все операции тут - выполняет код из данного проекта:
 ```console
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs$ cd mnt/
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$
+vselenaya@computer:~/hw_fuse/tmpfs$ cd mnt/
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$
 ```
 
 Можно позапускать команды и проверить, как работает программа:
 1. Изначально файловая система пустая:
 ```console
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ ls -l
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ ls -l
 итого 0
 ```
 2. Далее можно создать вложенные директории:
 ```console
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ mkdir -p 1/2/3/4/5
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ ls -l
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ mkdir -p 1/2/3/4/5
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ ls -l
 итого 0
 drwxrwxr-x 3 vselenaya vselenaya 3 мар 19 00:25 1
 ```
 3. Также создадим файл:
 ```console
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ touch file
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ ls -l
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ touch file
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ ls -l
 итого 0
 drwxrwxr-x 3 vselenaya vselenaya 3 мар 19 00:25 1
 -rw-rw-r-- 1 vselenaya vselenaya 0 мар 19 00:31 file
@@ -222,8 +222,8 @@ drwxrwxr-x 3 vselenaya vselenaya 3 мар 19 00:25 1
 
 4. Перенесём директорию 3 в корень:
 ```console
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ mv 1/2/3 .
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ ls -l
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ mv 1/2/3 .
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ ls -l
 итого 0
 drwxrwxr-x 3 vselenaya vselenaya 3 мар 19 00:25 1
 drwxrwxr-x 3 vselenaya vselenaya 3 мар 19 00:25 3
@@ -232,75 +232,75 @@ drwxrwxr-x 3 vselenaya vselenaya 3 мар 19 00:25 3
 
 5. Проверим чтение и запись в файл:
 ```console
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ echo "123456789" > file
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ cat file
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ echo "123456789" > file
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ cat file
 123456789
 ```
 
 6. Проверим права доступа у директории. Как известно, бит `x` у директории даёт возможность что-либо делать с её содержимым. Без этого бита с содержимым директории ничего не сделать - ни получить о нём данные, ни создать что-нибудь... хотя узнать, какие есть файлы в директории - можно, но вот их атрибуты и тд - нет. Проверяем:
 ```console
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ chmod -x 1
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ ls -l
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ chmod -x 1
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ ls -l
 итого 0
 drw-rw-r-- 3 vselenaya vselenaya  3 мар 19 00:25 1
 drwxrwxr-x 3 vselenaya vselenaya  3 мар 19 00:25 3
 -rw-rw-r-- 1 vselenaya vselenaya 10 мар 19 00:33 file
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ ls -l 1
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ ls -l 1
 ls: невозможно получить доступ к '1/2': Отказано в доступе
 итого 0
 ?????????? ? ? ? ?            ? 2
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ cd 1
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt/1$ ls -l
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ cd 1
+vselenaya@computer:~/hw_fuse/tmpfs/mnt/1$ ls -l
 ls: невозможно получить доступ к '2': Отказано в доступе
 итого 0
 ?????????? ? ? ? ?            ? 2
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt/1$ cd 2
+vselenaya@computer:~/hw_fuse/tmpfs/mnt/1$ cd 2
 bash: cd: 2: Отказано в доступе
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt/1$ touch
+vselenaya@computer:~/hw_fuse/tmpfs/mnt/1$ touch
 ```
 
 7. Вернём бит `x` и заработает:
 ```console
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt/1$ cd ..
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ chmod +x 1
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ ls -l 1
+vselenaya@computer:~/hw_fuse/tmpfs/mnt/1$ cd ..
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ chmod +x 1
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ ls -l 1
 итого 0
 drwxrwxr-x 3 vselenaya vselenaya 2 мар 19 00:32 2
 ```
 
 8. Уберём право на чтение у файла. Читать нельзя, а писать можно:
 ```console
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ chmod -r file 
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ ls -l
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ chmod -r file 
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ ls -l
 итого 0
 drwxrwxr-x 3 vselenaya vselenaya  3 мар 19 00:25 1
 drwxrwxr-x 3 vselenaya vselenaya  3 мар 19 00:25 3
 --w--w---- 1 vselenaya vselenaya 10 мар 19 00:33 file
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ cat file
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ cat file
 cat: file: Отказано в доступе
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ echo "123" > file
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ echo "123" > file
 ```
 
 8. Фай
 9. Дадим все права:
 ```console
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ chmod +rwx file
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ ls -l
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ chmod +rwx file
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ ls -l
 итого 0
 drwxrwxr-x 3 vselenaya vselenaya 3 мар 19 00:25 1
 drwxrwxr-x 3 vselenaya vselenaya 3 мар 19 00:25 3
 -rwxrwxr-x 1 vselenaya vselenaya 4 мар 19 00:39 file
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ cat file
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ cat file
 123
 ```
 
 10. Изменим владельца файла на root. Это можно сделать (как и вообще любое имзенение владельца в данном проекте только с правами суперпользователя - от sudo). Владелец и правда меняется:
 ```console
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ chown root file
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ chown root file
 chown: изменение владельца 'file': Операция не позволена
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ sudo chown root file
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ sudo chown root file
 [sudo] пароль для vselenaya: 
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ ls -l
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ ls -l
 итого 0
 drwxrwxr-x 3 vselenaya vselenaya 3 мар 19 00:25 1
 drwxrwxr-x 3 vselenaya vselenaya 3 мар 19 00:25 3
@@ -309,14 +309,14 @@ drwxrwxr-x 3 vselenaya vselenaya 3 мар 19 00:25 3
 
 11. Теперь изменить права у файла обычному пользователю уже нельзя, так как владелец поменялся:
 ```console
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ chmod -r file 
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ chmod -r file 
 chmod: изменение прав доступа для 'file': Операция не позволена
 ```
 
 12. Но можем спокойно удалить файл, так как у текущего пользователя vselenaya группа совпадает с группой у файла:
 ```console
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ rm file 
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ ls -l
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ rm file 
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ ls -l
 итого 0
 drwxrwxr-x 3 vselenaya vselenaya 3 мар 19 00:25 1
 drwxrwxr-x 3 vselenaya vselenaya 3 мар 19 00:25 3
@@ -324,24 +324,24 @@ drwxrwxr-x 3 vselenaya vselenaya 3 мар 19 00:25 3
 
 13. Проверим всякие ошибки:
 ```console
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ mkdir 1
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ mkdir 1
 mkdir: невозможно создать каталог «1»: Файл существует
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ cat 2
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ cat 2
 cat: 2: Нет такого файла или каталога
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ cat 3
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ cat 3
 cat: 3: Это каталог
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ mv 3/4 3/4/5
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ mv 3/4 3/4/5
 mv: невозможно перенести '3/4' в свой собственный подкаталог, '3/4/5/4'
 ```
 
 14. Можно удалить всё и заново создать файлики:
 ```
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ rm -r *
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ echo "123" > f1
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ echo "abcdef" > f2
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ mkdir 1 2 3
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ mv 2 1
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ ls -lasi
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ rm -r *
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ echo "123" > f1
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ echo "abcdef" > f2
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ mkdir 1 2 3
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ mv 2 1
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ ls -lasi
 итого 4
      1 0 drwxrwxrwx 4 vselenaya vselenaya    6 мар 19 01:11 .
 794809 4 drwxrwxr-x 4 vselenaya vselenaya 4096 мар 18 23:56 ..
@@ -354,14 +354,14 @@ vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ ls -lasi
 
 15. Можем выйти из файловой системы и размонтировать её. В этот момент программа `tm` завершится, а всё, что было в файловой системе - сотрётся, так как было в оперативной памят:
 ```console
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs/mnt$ cd ..
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs$ umount mnt
+vselenaya@computer:~/hw_fuse/tmpfs/mnt$ cd ..
+vselenaya@computer:~/hw_fuse/tmpfs$ umount mnt
 ```
 
 16. Если хочется узнать больше о способах и ключах запуска, можно запустить `--help`:
 
 ```console
-vselenaya@vselenaya-GF63-Thin-9SC:~/hw_fuse/tmpfs$ ./tm --help mnt
+vselenaya@computer:~/hw_fuse/tmpfs$ ./tm --help mnt
 Используем Fuse версию: 2.9
 about to call fuse_main
 usage: ./tm mountpoint [options]
