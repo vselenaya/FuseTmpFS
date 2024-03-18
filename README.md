@@ -256,7 +256,6 @@ ls: невозможно получить доступ к '2': Отказано 
 ?????????? ? ? ? ?            ? 2
 vselenaya@computer:~/hw_fuse/tmpfs/mnt/1$ cd 2
 bash: cd: 2: Отказано в доступе
-vselenaya@computer:~/hw_fuse/tmpfs/mnt/1$ touch
 ```
 
 7. Вернём бит `x` и заработает:
