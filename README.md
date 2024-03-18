@@ -333,7 +333,7 @@ mv: невозможно перенести '3/4' в свой собственн
 ```
 
 14. Можно удалить всё и заново создать файлики:
-```
+```console
 vselenaya@computer:~/hw_fuse/tmpfs/mnt$ rm -r *
 vselenaya@computer:~/hw_fuse/tmpfs/mnt$ echo "123" > f1
 vselenaya@computer:~/hw_fuse/tmpfs/mnt$ echo "abcdef" > f2
